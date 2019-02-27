@@ -189,6 +189,8 @@ router.get('/wx/wxuser/info', function(req, res, next) {
                 name: '@cname()',
                 cid: '@id()',
                 phone:'@id()',
+                ridname:"@county()",
+                comm:"@county(true)",
                 'sids|0-10':[
                     {
                         'sid|1-60': 0,
