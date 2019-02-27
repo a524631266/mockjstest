@@ -123,7 +123,7 @@ router.get('/wx/sportevent/sid/:sid/state/:state', function(req, res, next) {
             arrangement:'@cname( 40,100 )',
             rule:'@cname( 40,100 )',
             organizers:'@city( )',
-            uidstate: '@natural(0,4)',
+            uidstate: '@natural(2,4)',
     });
     var resa = JSON.stringify(data.arrs);
     res.send(resa);
@@ -188,10 +188,10 @@ router.get('/wx/wxuser/info', function(req, res, next) {
                 uid: '@id()',
                 name: '@cname()',
                 cid: '@id()',
-                phone:'@id()',
+                'phone|13600000000-18600000000':0,
                 ridname:"@county()",
                 comm:"@county(true)",
-                'sids|0-10':[
+                'sids|0-5':[
                     {
                         'sid|1-60': 0,
                         'rid|1-60': 0,
@@ -200,7 +200,7 @@ router.get('/wx/wxuser/info', function(req, res, next) {
                             starttime:'@natural(1531191176, 1541191176)',
                             expiretime:'@natural(1531191176, 1541191176)',
                         imgurl:'@image()',
-                        uidstate:'@natural(0,4)',
+                        uidstate:'@natural(2,4)',
                         nums:'@natural(0,400)'
                     }
                 ]
@@ -210,5 +210,16 @@ router.get('/wx/wxuser/info', function(req, res, next) {
     //   res.render('index', { title: resa });
 });
 
+router.get('/wx/everyday/day/:day', function(req, res, next) {
+    var data = Mock.mock(
+            {
+              imageurl:'@image()',
+              content:'@cparagraph(1)',
+            }
+          )
+    var resa = JSON.stringify(data);
+    res.send(resa);
+    //   res.render('index', { title: resa });
+});
 
 module.exports = router;
