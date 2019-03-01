@@ -18,9 +18,12 @@ router.get('/backend/login/pic/:img', function(req, res, next) {
 });
 // 2. 登录(一级管理员,二级管理员)
 router.post('/backend/login', function(req, res, next) {
-    var username = req.query.u;
-    var password = req.query.p;
-    if(password=="admin" && username=="admin") {
+    // post请求带参数的接收方法
+    var username = req.body.u;
+    var password = req.body.p;
+    var code = req.body.code;
+    if(password=="admin" && username=="admin" && code=="111") {
+        console.log("1111111")
         var token1 = token.createToken(req.query.code,10000);
         var data = Mock.mock({
             token:token1,

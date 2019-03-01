@@ -7,7 +7,7 @@ var router = express.Router();
 // 1.微信小程序登录并根据code返回 openid和 sessionid
 router.get('/wx/login/code/:code', function(req, res, next) {
   var token1 = token.createToken(req.params.code,10000);
-  console.log("222222222222222login")
+//   console.log("222222222222222login")
   var data = Mock.mock({
         "openid": '@string( 17, 19 )',
         "sessionid":token1
@@ -28,11 +28,11 @@ router.get('/wx/everyday/day/:day', function(req, res, next) {
     res.send(resa);
     //   res.render('index', { title: resa });
 });
-
 // 3.登录首页获取最新数量的赛事列表（日期降序排列）
-router.get('/wx/sportevents/size/:size', function(req, res, next) {
+router.get('/wx/sportevents/page/:page/size/:size', function(req, res, next) {
     var a = req.params.size
     var name  = 'arrs|'+ a;
+    var page= req.params.page
     var data = Mock.mock({
         [name]:[
             {
@@ -42,7 +42,7 @@ router.get('/wx/sportevents/size/:size', function(req, res, next) {
                 content:'@cparagraph(5)',
                 inserttime:'@natural(1531191176, 1541191176)',
                 starttime:'@natural(1531191176, 1541191176)',
-                Expiretime:'@natural(1531191176, 1541191176)',
+                expiretime:'@natural(1531191176, 1541191176)',
                 imgurl:'@image()',
                 nums:'@natural(0,400)'
             }
@@ -89,7 +89,7 @@ router.get('/wx/sportevents/last/:last/now/:now', function(req, res, next) {
                 content:'@cparagraph(5)',
                 inserttime:'@natural(1531191176, 1541191176)',
                 starttime:'@natural(1531191176, 1541191176)',
-                Expiretime:'@natural(1531191176, 1541191176)',
+                expiretime:'@natural(1531191176, 1541191176)',
                 imgurl:'@image()',
                 nums:'@natural(0,400)'
             }
@@ -100,7 +100,7 @@ router.get('/wx/sportevents/last/:last/now/:now', function(req, res, next) {
     //   res.render('index', { title: resa });
 });
 
-// 6.赛事列表
+// 6.赛事列表 /sportbean/wx/sportevent/sid/
 // a).当state为true的时候根据用户的openid返回报名状态用户可以根据openid
 // b).state为false的时候不用返回uidstate 用户可以根据openid
 router.get('/wx/sportevent/sid/:sid', function(req, res, next) {
@@ -109,27 +109,39 @@ router.get('/wx/sportevent/sid/:sid', function(req, res, next) {
     var size = '@natural(0,5)';
     var data = Mock.mock({
             title:'@csentence(20 )',
-            theme: '@cname( 40,100 )',
+            theme: '@cparagraph(5)',
             content:'@cparagraph(5)',
             imgurl:'@image()',
-            startime:'@natural(1531191176, 1541191176)',
-            Inserttime:'@natural(1531191176, 1541191176)',
-            place:'@csentence(1 )',
-            arrangement:'@cname( 40,100 )',
-            rule:'@cname( 40,100 )',
+            starttime:'@natural(1531191176, 1541191176)',
+            inserttime:'@natural(1531191176, 1541191176)',
+            place:'@csentence(10)',
+            arrange:'@cparagraph(5)',
+            way2entry:'@cparagraph(5)',
+            rule:'@cparagraph(5)',
             organizers:'@city( )',
-            uidstate: '@natural(2,4)', // 单个用户在当前下的报名条件
+            uidstate: '@natural(-1,4)', // 单个用户在当前下的报名条件
+            hostparty: '@cparagraph(1)',// '赛事举办方',
+            contactperson: '@cname()',// '赛事联系人姓名',
+            'contactphone|13600000000-18600000000':0,// '赛事联系人电话',
     });
-    var resa = JSON.stringify(data.arrs);
+    var resa = JSON.stringify(data);
+    console.log("detail",resa);
     res.send(resa);
     //   res.render('index', { title: resa });
 });
-// 7.直接报名,不可重复报名切记
+// 7.直接报名,不可重复报名切记,session中保留了openid 
 router.post('/wx/entrytable/sid/:sid', function(req, res, next) {
     var sid = req.params.sid;
     var state = req.params.state;
     var size = '@natural(0,5)';
-    var resa = '@boolean()';
+    var openid = req.cookies.openid;
+    console.log("openid",req.headers);
+    console.log("cookies",req.cookies.openid);
+    var data = Mock.mock(
+            {
+                'uidstate|0-2':1 // 0为未注册，２为已报名成功
+            });
+    var resa = JSON.stringify(data);
     res.send(resa);
     //   res.render('index', { title: resa });
 });
