@@ -12,7 +12,7 @@ var router = express.Router();
 router.get('/backend/login/pic/:img', function(req, res, next) {
     var filename = req.params.img
     console.log("__dirname",__dirname);
-    res.sendFile( path.resolve(__dirname,"../","static","imgs") + "/" + filename );
+    res.sendFile( path.resolve(__dirname,"../","static","imgs") + "/" + Mock.mock("@natural(1,3)") + ".jpg" );
     console.log("Request for " + req.url + " received.");
 //   res.render('index', { title: resa });
 });
@@ -22,6 +22,7 @@ router.post('/backend/login', function(req, res, next) {
     var username = req.body.u;
     var password = req.body.p;
     var code = req.body.code;
+    console.log("1111",req.body)
     if(password=="admin" && username=="admin" && code=="111") {
         console.log("1111111")
         var token1 = token.createToken(req.query.code,10000);
@@ -29,7 +30,7 @@ router.post('/backend/login', function(req, res, next) {
             token:token1,
             "aid|1-43":1, // aid 为admin id
             "rid|1-43":1, // rid 为用户区域id
-            "level|1-2": 1 // level 为用户等级，等级为1为一级管理员 2 为二级管理员
+            "level|1-1": 1 // level 为用户等级，等级为1为一级管理员 2 为二级管理员
           });
         var result = JSON.stringify(data);
         res.send(result)
